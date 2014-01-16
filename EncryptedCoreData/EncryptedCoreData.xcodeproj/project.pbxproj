@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C3230686188792270068E05E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3230685188792270068E05E /* Security.framework */; };
 		C3CCBB7718804338009BD3ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3CCBB7618804338009BD3ED /* Foundation.framework */; };
-		C3CCBB7918804338009BD3ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3CCBB7818804338009BD3ED /* CoreGraphics.framework */; };
 		C3CCBB7B18804338009BD3ED /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3CCBB7A18804338009BD3ED /* UIKit.framework */; };
 		C3CCBB7D18804338009BD3ED /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3CCBB7C18804338009BD3ED /* CoreData.framework */; };
 		C3CCBB8318804338009BD3ED /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C3CCBB8118804338009BD3ED /* InfoPlist.strings */; };
@@ -26,7 +26,6 @@
 		C3CCBBBD18804AE8009BD3ED /* NSStringEncryptionTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = C3CCBBB018804AE8009BD3ED /* NSStringEncryptionTransformer.m */; };
 		C3CCBBBE18804AE8009BD3ED /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = C3CCBBB218804AE8009BD3ED /* KeychainItemWrapper.m */; };
 		C3CCBBBF18804AE8009BD3ED /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = C3CCBBB418804AE8009BD3ED /* NSData+AES256.m */; };
-		C3CCBBC118804AE8009BD3ED /* NSString+Hash.m in Sources */ = {isa = PBXBuildFile; fileRef = C3CCBBB818804AE8009BD3ED /* NSString+Hash.m */; };
 		C3CCBBC218804AE8009BD3ED /* DataGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = C3CCBBBB18804AE8009BD3ED /* DataGenerator.m */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C3230685188792270068E05E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		C3CCBB7318804338009BD3ED /* EncryptedCoreData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EncryptedCoreData.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3CCBB7618804338009BD3ED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C3CCBB7818804338009BD3ED /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -67,8 +67,6 @@
 		C3CCBBB218804AE8009BD3ED /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		C3CCBBB318804AE8009BD3ED /* NSData+AES256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AES256.h"; sourceTree = "<group>"; };
 		C3CCBBB418804AE8009BD3ED /* NSData+AES256.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES256.m"; sourceTree = "<group>"; };
-		C3CCBBB718804AE8009BD3ED /* NSString+Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Hash.h"; sourceTree = "<group>"; };
-		C3CCBBB818804AE8009BD3ED /* NSString+Hash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Hash.m"; sourceTree = "<group>"; };
 		C3CCBBBA18804AE8009BD3ED /* DataGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataGenerator.h; sourceTree = "<group>"; };
 		C3CCBBBB18804AE8009BD3ED /* DataGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataGenerator.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -78,7 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3CCBB7918804338009BD3ED /* CoreGraphics.framework in Frameworks */,
+				C3230686188792270068E05E /* Security.framework in Frameworks */,
 				C3CCBB7D18804338009BD3ED /* CoreData.framework in Frameworks */,
 				C3CCBB7B18804338009BD3ED /* UIKit.framework in Frameworks */,
 				C3CCBB7718804338009BD3ED /* Foundation.framework in Frameworks */,
@@ -121,6 +119,7 @@
 		C3CCBB7518804338009BD3ED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C3230685188792270068E05E /* Security.framework */,
 				C3CCBB7618804338009BD3ED /* Foundation.framework */,
 				C3CCBB7818804338009BD3ED /* CoreGraphics.framework */,
 				C3CCBB7A18804338009BD3ED /* UIKit.framework */,
@@ -181,8 +180,6 @@
 				C3CCBBB218804AE8009BD3ED /* KeychainItemWrapper.m */,
 				C3CCBBB318804AE8009BD3ED /* NSData+AES256.h */,
 				C3CCBBB418804AE8009BD3ED /* NSData+AES256.m */,
-				C3CCBBB718804AE8009BD3ED /* NSString+Hash.h */,
-				C3CCBBB818804AE8009BD3ED /* NSString+Hash.m */,
 			);
 			path = Crypto;
 			sourceTree = "<group>";
@@ -305,7 +302,6 @@
 				C3CCBBBC18804AE8009BD3ED /* EncryptionTransformer.m in Sources */,
 				C3CCBB8C18804338009BD3ED /* EncryptedCoreData.xcdatamodeld in Sources */,
 				C3CCBBBE18804AE8009BD3ED /* KeychainItemWrapper.m in Sources */,
-				C3CCBBC118804AE8009BD3ED /* NSString+Hash.m in Sources */,
 				C3CCBBC218804AE8009BD3ED /* DataGenerator.m in Sources */,
 				C3CCBB8918804338009BD3ED /* AppDelegate.m in Sources */,
 				C3CCBBBD18804AE8009BD3ED /* NSStringEncryptionTransformer.m in Sources */,
@@ -513,6 +509,7 @@
 				C3CCBBA718804339009BD3ED /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C3CCBBA818804339009BD3ED /* Build configuration list for PBXNativeTarget "EncryptedCoreDataTests" */ = {
 			isa = XCConfigurationList;
@@ -521,6 +518,7 @@
 				C3CCBBAA18804339009BD3ED /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

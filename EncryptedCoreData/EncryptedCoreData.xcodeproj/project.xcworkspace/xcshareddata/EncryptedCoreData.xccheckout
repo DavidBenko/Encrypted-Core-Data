@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>8009E611-D969-4181-91EF-CE8BFC6A62AF</string>
+	<key>IDESourceControlProjectName</key>
+	<string>EncryptedCoreData</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>05AF4D1A-187E-48DA-8D88-2BC3B0CCD111</key>
+		<string>https://github.com/DavidBenko/Encrypted-Core-Data.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>EncryptedCoreData/EncryptedCoreData.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>05AF4D1A-187E-48DA-8D88-2BC3B0CCD111</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/DavidBenko/Encrypted-Core-Data.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>05AF4D1A-187E-48DA-8D88-2BC3B0CCD111</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>05AF4D1A-187E-48DA-8D88-2BC3B0CCD111</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Encrypted-Core-Data</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -9,15 +9,16 @@
 #import "DataGenerator.h"
 
 @implementation DataGenerator
-+(NSData*)createRandomDataOfLength:(int)length
-{
-    NSMutableData* theData = [NSMutableData dataWithCapacity:length * 4];
-    for( unsigned int i = 0 ; i < length ; ++i )
-    {
-        u_int32_t randomBits = arc4random();
-        [theData appendBytes:(void*)&randomBits length:4];
-    }
-    return theData;
++ (NSData *)createRandomDataOfLength:(size_t)length {
+    NSMutableData *data = [NSMutableData dataWithLength:length];
+    
+    int result = SecRandomCopyBytes(kSecRandomDefault,
+                                    length,
+                                    data.mutableBytes);
+    NSAssert(result == 0, @"Unable to generate random bytes: %d",
+             errno);
+    
+    return data;
 }
 +(NSString *)createRandomStringOfLength:(int)len {
     NSMutableString *randomString = [NSMutableString stringWithCapacity: len];

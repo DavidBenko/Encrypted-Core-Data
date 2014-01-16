@@ -10,77 +10,124 @@
 
 @implementation NSData (AES256)
 
-- (NSData *)AES256EncryptWithKey:(NSString *)key {
-	return [self AES256EncryptWithKey:key Iv:NULL];
+NSString * const kRNCryptManagerErrorDomain = @"com.prndl.EncryptedCoreData";
+
+const CCAlgorithm kAlgorithm = kCCAlgorithmAES128;
+const NSUInteger kAlgorithmKeySize = kCCKeySizeAES128;
+const NSUInteger kAlgorithmBlockSize = kCCBlockSizeAES128;
+const NSUInteger kAlgorithmIVSize = kCCBlockSizeAES128;
+const NSUInteger kPBKDFSaltSize = 8;
+const NSUInteger kPBKDFRounds = 10000;
+
+// Borrowed some code from http://robnapier.net/aes-commoncrypto/
+
++ (NSData *)AESKeyForPassword:(NSString *)password
+                         salt:(NSData *)salt {
+    NSMutableData *
+    derivedKey = [NSMutableData dataWithLength:kAlgorithmKeySize];
+    
+    int
+    result = CCKeyDerivationPBKDF(kCCPBKDF2,            // algorithm
+                                  password.UTF8String,  // password
+                                  [password lengthOfBytesUsingEncoding:NSUTF8StringEncoding],  // passwordLength
+                                  salt.bytes,           // salt
+                                  salt.length,          // saltLen
+                                  kCCPRFHmacAlgSHA1,    // PRF
+                                  kPBKDFRounds,         // rounds
+                                  derivedKey.mutableBytes, // derivedKey
+                                  derivedKey.length); // derivedKeyLen
+    
+    // Do not log password here
+    NSAssert(result == kCCSuccess,
+             @"Unable to create AES key for password: %d", result);
+    
+    return derivedKey;
 }
 
-- (NSData *)AES256DecryptWithKey:(NSString *)key {
-	return [self AES256DecryptWithKey:key Iv:NULL];
+- (NSData *)encryptedDataWithPassword:(NSString *)password
+                              iv:(NSData **)iv
+                            salt:(NSData **)salt
+                           error:(NSError **)error {
+    
+    NSAssert(iv, @"IV must not be NULL");
+    NSAssert(salt, @"salt must not be NULL");
+    
+    *iv = [DataGenerator createRandomDataOfLength:kAlgorithmIVSize];
+    *salt = [DataGenerator createRandomDataOfLength:kPBKDFSaltSize];
+    
+    NSData *key = [NSData AESKeyForPassword:password salt:*salt];
+    
+    size_t outLength;
+    NSMutableData *
+    cipherData = [NSMutableData dataWithLength:self.length +
+                  kAlgorithmBlockSize];
+    
+    CCCryptorStatus
+    result = CCCrypt(kCCEncrypt, // operation
+                     kAlgorithm, // Algorithm
+                     kCCOptionPKCS7Padding, // options
+                     key.bytes, // key
+                     key.length, // keylength
+                     (*iv).bytes,// iv
+                     self.bytes, // dataIn
+                     self.length, // dataInLength,
+                     cipherData.mutableBytes, // dataOut
+                     cipherData.length, // dataOutAvailable
+                     &outLength); // dataOutMoved
+    
+    if (result == kCCSuccess) {
+        cipherData.length = outLength;
+    }
+    else {
+        if (error) {
+            *error = [NSError errorWithDomain:kRNCryptManagerErrorDomain
+                                         code:result
+                                     userInfo:nil];
+        }
+        return nil;
+    }
+    
+    return cipherData;
 }
 
-- (NSData *)AES256EncryptWithKey:(NSString *)key Iv:(const void *)iv {
-	// 'key' should be 32 bytes for AES256, will be null-padded otherwise
-	char keyPtr[kCCKeySizeAES256+1]; // room for terminator (unused)
-	bzero(keyPtr, sizeof(keyPtr)); // fill with zeroes (for padding)
+- (NSData *)decryptedDataWithPassword:(NSString *)password
+                              iv:(NSData *)iv
+                            salt:(NSData *)salt
+                           error:(NSError **)error {
     
-	// fetch key data
-	[key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSASCIIStringEncoding];
+    NSData *key = [NSData AESKeyForPassword:password salt:salt];
     
-	NSUInteger dataLength = [self length];
+    size_t outLength;
+    NSMutableData *
+    decryptedData = [NSMutableData dataWithLength:self.length];
+    CCCryptorStatus
+    result = CCCrypt(kCCDecrypt, // operation
+                     kAlgorithm, // Algorithm
+                     kCCOptionPKCS7Padding, // options
+                     key.bytes, // key
+                     key.length, // keylength
+                     iv.bytes,// iv
+                     self.bytes, // dataIn
+                     self.length, // dataInLength,
+                     decryptedData.mutableBytes, // dataOut
+                     decryptedData.length, // dataOutAvailable
+                     &outLength); // dataOutMoved
     
-	//See the doc: For block ciphers, the output size will always be less than or
-	//equal to the input size plus the size of one block.
-	//That's why we need to add the size of one block here
-	size_t bufferSize = dataLength + kCCBlockSizeAES128;
-	void *buffer = malloc(bufferSize);
+    if (result == kCCSuccess) {
+        [decryptedData setLength:outLength];
+    }
+    else {
+        if (result != kCCSuccess) {
+            if (error) {
+                *error = [NSError
+                          errorWithDomain:kRNCryptManagerErrorDomain
+                          code:result
+                          userInfo:nil];
+            }
+            return nil;
+        }
+    }
     
-	size_t numBytesEncrypted = 0;
-	CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
-										  keyPtr, kCCKeySizeAES256,
-										  iv/* initialization vector (optional) */,
-										  [self bytes], dataLength, /* input */
-										  buffer, bufferSize, /* output */
-										  &numBytesEncrypted);
-	if (cryptStatus == kCCSuccess) {
-		//the returned NSData takes ownership of the buffer and will free it on deallocation
-		return [NSData dataWithBytesNoCopy:buffer length:numBytesEncrypted];
-	}
-    
-	free(buffer); //free the buffer;
-	return nil;
+    return decryptedData;
 }
-
-- (NSData *)AES256DecryptWithKey:(NSString *)key Iv:(const void *)iv{
-	// 'key' should be 32 bytes for AES256, will be null-padded otherwise
-	char keyPtr[kCCKeySizeAES256+1]; // room for terminator (unused)
-	bzero(keyPtr, sizeof(keyPtr)); // fill with zeroes (for padding)
-    
-	// fetch key data
-	[key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSASCIIStringEncoding];
-    
-	NSUInteger dataLength = [self length];
-    
-	//See the doc: For block ciphers, the output size will always be less than or
-	//equal to the input size plus the size of one block.
-	//That's why we need to add the size of one block here
-	size_t bufferSize = dataLength + kCCBlockSizeAES128;
-	void *buffer = malloc(bufferSize);
-    
-	size_t numBytesDecrypted = 0;
-	CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
-										  keyPtr, kCCKeySizeAES256,
-										  iv /* initialization vector (optional) */,
-										  [self bytes], dataLength, /* input */
-										  buffer, bufferSize, /* output */
-										  &numBytesDecrypted);
-    
-	if (cryptStatus == kCCSuccess) {
-		//the returned NSData takes ownership of the buffer and will free it on deallocation
-		return [NSData dataWithBytesNoCopy:buffer length:numBytesDecrypted];
-	}
-    
-	free(buffer); //free the buffer;
-	return nil;
-}
-
 @end

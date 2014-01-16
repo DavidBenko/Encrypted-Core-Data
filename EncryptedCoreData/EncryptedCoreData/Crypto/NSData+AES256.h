@@ -8,11 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonCryptor.h>
+#import <CommonCrypto/CommonKeyDerivation.h>
+#import "DataGenerator.h"
 
 @interface NSData (AES256)
-- (NSData *)AES256EncryptWithKey:(NSString *)key;
-- (NSData *)AES256DecryptWithKey:(NSString *)key;
-- (NSData *)AES256EncryptWithKey:(NSString *)key Iv:(const void *)iv;
-- (NSData *)AES256DecryptWithKey:(NSString *)key Iv:(const void *)iv;
+
++ (NSData *)AESKeyForPassword:(NSString *)password salt:(NSData *)salt;
+- (NSData *)encryptedDataWithPassword:(NSString *)password iv:(NSData **)iv salt:(NSData **)salt error:(NSError **)error;
+- (NSData *)decryptedDataWithPassword:(NSString *)password iv:(NSData *)iv salt:(NSData *)salt error:(NSError **)error;
 
 @end

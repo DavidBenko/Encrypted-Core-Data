@@ -13,5 +13,5 @@
 
 @interface DataGenerator : NSObject
 +(NSString *)createRandomStringOfLength:(int)len;
-+(NSData*)createRandomDataOfLength:(int)length;
++(NSData*)createRandomDataOfLength:(size_t)length;
 @end
