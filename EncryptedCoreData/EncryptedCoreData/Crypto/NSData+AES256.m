@@ -27,7 +27,7 @@ const NSUInteger kPBKDFRounds = 10000;
     derivedKey = [NSMutableData dataWithLength:kAlgorithmKeySize];
     
     int
-    result = CCKeyDerivationPBKDF(kCCPBKDF2,            // algorithm
+    result __unused = CCKeyDerivationPBKDF(kCCPBKDF2,            // algorithm
                                   password.UTF8String,  // password
                                   [password lengthOfBytesUsingEncoding:NSUTF8StringEncoding],  // passwordLength
                                   salt.bytes,           // salt
