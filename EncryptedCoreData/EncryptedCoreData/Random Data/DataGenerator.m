@@ -12,7 +12,7 @@
 + (NSData *)createRandomDataOfLength:(size_t)length {
     NSMutableData *data = [NSMutableData dataWithLength:length];
     
-    int result = SecRandomCopyBytes(kSecRandomDefault,
+    int result __unused = SecRandomCopyBytes(kSecRandomDefault,
                                     length,
                                     data.mutableBytes);
     NSAssert(result == 0, @"Unable to generate random bytes: %d",
@@ -23,7 +23,7 @@
 +(NSString *)createRandomStringOfLength:(int)len {
     NSMutableString *randomString = [NSMutableString stringWithCapacity: len];
     for (int i=0; i<len; i++) {
-        [randomString appendFormat: @"%C", [[DataGenerator shuffleSetWithSet:ALL_CHARACTERS] characterAtIndex: arc4random_uniform(ALL_CHARACTERS_LENGTH)]];
+        [randomString appendFormat: @"%C", [[DataGenerator shuffleSetWithSet:ALL_CHARACTERS] characterAtIndex: arc4random_uniform((int)ALL_CHARACTERS_LENGTH)]];
     }
     return randomString;
 }
@@ -32,7 +32,7 @@
     NSMutableString *newSet;
     newSet = [NSMutableString stringWithString:set];
     // Loop backwards through members of the set
-    for (int i = ([set length] - 1); i > 0; i--) {
+    for (int i = ((int)[set length] - 1); i > 0; i--) {
         /* Choose a random number (0 <= rand <= i)
          Because i constantly decreases, the number
          of elements we can swap with becomes smaller
